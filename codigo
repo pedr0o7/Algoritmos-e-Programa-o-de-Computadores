@@ -1,0 +1,412 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#define verd  1/*mnemonicos*/
+#define min  0/*mnemonicos*/
+
+int verificar_base(char * str);/*Funcao que pega parte da string que representa a base.*/
+
+int verificar_numero(char * str, char * numero, int * A, int base);/*Funcao que pega parte da string que representa o numero a ser convertido.*/
+
+int valor(char c);/*Funcao que retorna o valor decimal.*/
+
+double converter_decimal(char * numero, int base, int A);/*Funcao que realiza a conversao do numero..*/
+
+void extrair_base(char * str, int * base);/*Recebe o ponteiro da string validada em e realiza a conversao de string para inteiro*/
+
+void inserir(char * str, char * numero, int * base, int * A);/*Funcao responsavel por interagir com o usuario.*/
+
+void fim_recomeco();/*Mensagem exibida no inicio da execucao do programa*/
+
+void iniciar();/*Mensagem exibida apos a execucao de uma conversao.*/
+
+void erro();/*Mensagem exibida quando o usuario insere uma opcao invalida.*/
+
+void inserir_menssagem();/*Mensagem exibida quando o usuario e solicitado a inserir o numero e a base.*/
+
+
+int main()/*Funcao principal.*/
+
+{
+  iniciar();/*Chama a Fução iniciar*/
+
+  int X;/*Declarando X como inteiro*/
+
+  while(scanf("%d", &X) && X-2){/*looping*/
+
+    getchar();/* função da biblioteca padrão stdio.Cada vez que é chamada, esta função lê um caractere teclado*/
+
+    if(X != 1){ /*se x for diferente de 1*/
+
+      erro(); /*Chama a Fução erro*/
+
+      continue; /*Continua a sequencia de codigos*/
+
+    }
+
+    printf("\n");/*Pula linha*/
+
+    char input[100];/*declaração de variavel*/
+
+    char numero[100];/*declaração de variavel*/
+
+    int base, A = 0;/*declaração de variavel*/
+
+    inserir(input, numero, &base, &A);/*Chama a Fução inserir */
+
+    printf("\n\tEntrou com  %s na base %d\n", numero, base);/*Mostra para o usuario uma mensagem*/
+
+    printf("\tResultado: %lf na base 10\n\n", converter_decimal(numero, base, A));/*Mostra para o usuario uma mensagem*/
+
+
+    fim_recomeco();/*Chama a Fução fim_recomeço*/
+
+  }
+
+  printf("\n\t\t____________________FIM!____________________\n");/*Mostra para o usuario uma mensagem*/
+
+
+  return min;/*função é encerrada imediatamente e retorna 0*/
+
+
+}
+
+
+void iniciar(){/*função que não retorna nada e função que não têm parâmetro*/
+
+  printf("\t\t_____________INICIANDO O PROGRAMA_____________\n\n\n");/*Mostra para o usuario uma mensagem*/
+  printf("\t\t\t__________*OBSERVAÇÕES:*__________\n\n");/*Mostra para o usuario uma mensagem*/
+
+  printf("**********LEIA O QUE O PROGRAMA PEDE PORFAVOR!**********\n\n");/*Mostra para o usuario uma mensagem*/
+
+  printf("***O ponto final representa a virgula nos resultados!***\n\n");/*Mostra para o usuario uma mensagem*/
+
+  printf("\t\t_____________INICIO DO PROGRAMA_____________\n\n");/*Mostra para o usuario uma mensagem*/
+
+  printf("Esse programa ira converter:\nBinario_(base = 2) para Decimal;\nOctal_(base = 8) para Decimal;\nHexadecimal_(base = 16) para Decimal;\n");/*Mostra para o usuario uma mensagem*/
+
+  printf("\nDigite 1 para converter e 2 para parar:\n");/*Mostra para o usuario uma mensagem*/
+
+}
+
+
+void fim_recomeco(){/*função que não retorna nada e função que não têm parâmetro*/
+
+  printf("Digite 1 para continuar e 2 para parar:\n");/*Mostra para o usuario uma mensagem*/
+
+}
+
+
+void erro(){/*função que não retorna nada e função que não têm parâmetro*/
+
+  printf("\n\tERRO! opição inesistente\n\n");/*Mostra para o usuario uma mensagem*/
+
+  printf("Digite 1 para continuar e 2 para parar:\n");/*Mostra para o usuario uma mensagem*/  
+
+}
+
+
+int verificar_numero(char * str, char * numero, int * A, int base){/*Chama a Fução verificar_numero declarando que ela sera inteira */
+
+  int i=0, qtd = 0, posicao = 0;/*declaração de variavel*/
+
+  for(;str[i]!='_';i++){/*looping definido*/
+
+    numero[i] = str[i];/*igualando*/
+
+    if(numero[i] >= 'a' && numero[i] <= 'z'){/*se isso for verdade*/
+
+      numero[i] -= 32;/*Tirando 32*/
+
+    }
+
+  }
+
+  numero[i] = '\0';/*igualando*/
+
+  if(strlen(numero) == 0){/*se isso for verdade*/
+
+    return min;/*função é encerrada imediatamente e retorna 0*/
+
+  }
+
+  if(base == 2){/*se isso for verdade*/
+
+    for(i=0;numero[i]!='\0';i++){/*looping definido*/
+      
+      if(numero[i] >= '0' && numero[i] <= '1' ){/*se isso for verdade*/
+
+        continue;/*Continua a sequencia de codigos*/
+
+      }else{/*se não*/
+
+        if(numero[i] == ','){/*se isso for verdade*/
+
+          *A = 1;/*igualando*/
+
+          qtd++;/*aumenta mais 1*/
+
+          posicao = i;/*igualando*/
+
+          continue;/*Continua a sequencia de codigos*/
+
+        }
+
+        return min;/*função é encerrada imediatamente e retorna 0*/
+
+      }
+
+    }
+
+  }else if(base == 8){/*se isso for verdade*/
+
+    for(i=0;numero[i]!='\0';i++){/*looping definido*/
+
+      if(numero[i] >= '0' && numero[i] <= '7' ){/*se isso for verdade*/
+
+        continue;/*Continua a sequencia de codigos*/
+
+      }else{/*se não*/
+
+        if(numero[i] == ','){/*se isso for verdade*/
+
+          *A = 1;/*igualando*/
+
+          qtd++;/*aumenta mais 1*/
+
+          posicao = i;/*igualando*/
+
+          continue;/*Continua a sequencia de codigos*/
+
+        }
+
+        return min;/*função é encerrada imediatamente e retorna 0*/
+
+      }
+
+    }
+
+  }else if(base == 16){/*se isso for verdade*/
+
+    for(i=0;numero[i]!='\0';i++){/*looping definido*/
+
+      if((numero[i] >= '0' && numero[i] <= '9') ||
+        (numero[i]>='A' && numero[i] <= 'F')){/*se isso for verdade*/
+
+        continue;/*Continua a sequencia de codigos*/
+
+      }else{/*se não*/
+
+        if(numero[i] == ','){/*se isso for verdade*/
+
+          *A = 1;/*igualando*/
+
+          qtd++;/*aumenta mais 1*/
+
+          posicao = i;/*igualando*/
+
+          continue;/*Continua a sequencia de codigos*/
+
+        }
+
+        return min;/*função é encerrada imediatamente e retorna 0*/
+
+      }
+
+    }
+
+  }
+
+  if(qtd == 0 || qtd == 1){/*se isso for verdade*/
+
+    if(qtd == 1 && posicao == 0){/*se isso for verdade*/
+
+      return min;/*função é encerrada imediatamente e retorna 0*/
+
+    }
+
+    return verd;/*função é encerrada imediatamente e retorna 1*/
+
+  }
+
+  return min;/*função é encerrada imediatamente e retorna 0*/
+
+}
+
+
+int verificar_base(char * str){/*Chama a Fução verificar_base declarando que e inteira */
+
+  int i, tam = strlen(str), index=0;/*declaração de variavel*/
+
+  char base[30];/*declaração de variavel*/
+
+  for(i=0;str[i]!='\0';i++){/*looping definido*/
+
+    if(str[i] == '_'){/*se isso for verdade*/
+
+      i++;/*aumenta mais 1*/
+
+      break;/*Forçar a saída de um laço de repetição.*/
+
+    }
+
+  }
+
+  if(i == tam){/*se isso for verdade*/
+
+    return min;/*função é encerrada imediatamente e retorna 0*/
+
+  }
+
+  while(i < tam){/*looping*/
+
+    base[index++]=str[i++];/*igualando*/
+
+  }
+
+  base[index] = '\0';/*igualando*/
+
+  for(i=0;base[i]!='\0';i++){/*looping definido*/
+
+    if(base[i] < '0' || base[i] > '9'){/*se isso for verdade*/
+
+      return min;/*função é encerrada imediatamente e retorna 0*/
+
+    }
+
+  }
+
+  return verd;/*função é encerrada imediatamente e retorna 1*/
+
+}
+
+void extrair_base(char * str, int * base){/*função que não retorna nada e função que não têm parâmetro*/
+
+  int i = strlen(str)-1;/*declaração de variavel*/
+
+  int s = 0, d=1;/*declaração de variavel*/
+
+  while(str[i]!='_'){/*looping*/
+
+    s+=(str[i]-'0')*d;/*igualando*/
+
+    d*=10;/*igualando*/
+
+    i--;/*diminui 1*/
+
+  }
+
+  *base = s;/*igualando*/
+
+}
+
+void inserir_menssagem(){/*função que não retorna nada e função que não têm parâmetro*/  
+
+  printf("Insira o numero no formato:\n");/*Mostra para o usuario uma mensagem*/
+
+  printf("\n\tnumero_base\n ");/*Mostra para o usuario uma mensagem*/
+
+}
+
+void inserir(char * str, char * numero, int * base, int * A){/*função que não retorna nada e função que não têm parâmetro*/
+
+  inserir_menssagem();/*Chama a Fução inserir */
+
+  scanf("%[^\n]%*c", str);/*solicita ao usuario o valor de str*/
+
+  if(verificar_base(str)){/*se isso for verdade*/
+
+    extrair_base(str, base);/*Chama a Fução extrair_base*/
+
+    if(*base == 2 || *base == 8 || *base == 16){/*se isso for verdade*/
+
+      if(verificar_numero(str, numero, A, *base)){/*se isso for verdade*/
+
+        return;/*função é encerrada imediatamente */
+
+      }else{/*se não*/
+
+        printf("\n\tERRO! numero errado\n");/*Mostra para o usuario uma mensagem*/
+
+        inserir(str, numero, base, A);/*Chama a Fução inserir */
+
+      }
+
+    }else{/*se não*/
+
+      printf("\n\tERRO! base errada\n");/*Mostra para o usuario uma mensagem*/
+
+      inserir(str, numero, base, A);/*Chama a Fução inserir */
+
+    }
+
+  }else{/*se não*/
+
+    printf("\n\tERRO!\n");/*Mostra para o usuario uma mensagem*/
+
+    inserir(str, numero, base, A);/*Chama a Fução inserir */
+
+  }
+
+}
+
+
+int valor(char c){/*Chama a Fução valor declarando que e inteiro */
+
+  if(c >='0' && c <='9'){/*se isso for verdade*/
+
+    return c-'0';/*função é encerrada imediatamente e retorna c-0*/
+
+  }
+
+  return c-'7';/*função é encerrada imediatamente e retorna c-7*/
+
+}
+
+
+double converter_decimal(char * numero, int base, int A){/*Chama a Fução converter_decimal declarando que e double */
+
+  double r = 0;/*declaração de variavel*/
+
+  int i, p=0;/*declaração de variavel*/
+
+  if(!A){/*se isso for verdade*/
+
+    for(i=strlen(numero)-1;i>=0;i--){/*looping definido*/
+
+      r += (valor(numero[i]))*pow(base, p++);/*cálculo*/
+
+    }
+
+  }else{/*se não*/
+
+    int dps = 0;/*declaração de variavel*/
+
+    for(i=strlen(numero)-1;numero[i]!=',';i--){/*looping definido*/
+
+      dps++;/*aumenta mais 1*/
+
+    }
+
+    p = dps*(-1);/*igualando*/
+
+    for(i=strlen(numero)-1;i>=0;i--){/*looping definido*/
+
+      if(numero[i] == ','){/*se isso for verdade*/
+
+        continue;/*Continua a sequencia de codigos*/
+
+      }else{/*se não*/
+
+        r += (valor(numero[i]))*pow(base, p++);/*cálculo*/
+
+      }
+
+    }
+
+  }
+
+  return r;/*função é encerrada imediatamente e retorna r*/
+
+}
